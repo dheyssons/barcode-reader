@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
+import { CiBarcode } from "react-icons/ci";
 
 export default function BarcodeScanner() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -53,7 +54,7 @@ export default function BarcodeScanner() {
   }, [code]);
 
   return (
-    <main className="w-screen h-screen flex flex-col">
+    <main className="w-screen h-screen flex flex-col items-center gap-y-10">
       <video ref={videoRef} />
       <p>
         <strong>Código detectado:</strong> {code || "Nenhum"}
@@ -65,6 +66,13 @@ export default function BarcodeScanner() {
           <strong>Nome do produto:</strong> {productName}
         </p>
       ) : null}
+
+      <div>
+        <button>
+          <span>0</span>
+          <CiBarcode size={64}></CiBarcode>
+        </button>
+      </div>
     </main>
   );
 }
