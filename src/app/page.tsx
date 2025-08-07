@@ -56,18 +56,18 @@ export default function BarcodeScanner() {
   return (
     <main className="w-screen h-screen flex flex-col items-center gap-y-10">
       <video ref={videoRef} />
-      <p>
-        <strong>Código detectado:</strong> {code || "Nenhum"}
-      </p>
-      {loading ? (
-        <p>🔎 Buscando produto...</p>
-      ) : productName ? (
-        <p>
-          <strong>Nome do produto:</strong> {productName}
-        </p>
-      ) : null}
 
-      <div>
+      <div className="absolute flex flex-col items-center">
+        <p>
+          <strong>Código detectado:</strong> {code || "Nenhum"}
+        </p>
+        {loading ? (
+          <p>🔎 Buscando produto...</p>
+        ) : productName ? (
+          <p>
+            <strong>Nome do produto:</strong> {productName}
+          </p>
+        ) : null}
         <button>
           <span>0</span>
           <CiBarcode size={64}></CiBarcode>
