@@ -2,12 +2,26 @@
 import { useEffect, useRef, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 import { CiBarcode } from "react-icons/ci";
+import JsBarcode from "jsbarcode";
 
 export default function BarcodeScanner() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [code, setCode] = useState<string | null>(null);
   const [productName, setProductName] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [scannedProductsLength, setScannedProductsLength] = useState(0);
+  const [products, setProducts] = useState(null);
+
+  function addProduct(productName: any, productBarcode: any) {
+    setScannedProductsLength(scannedProductsLength + 1);
+
+    const newBarcodeElement = document.createElement("canvas");
+    newBarcodeElement.setAttribute("id", `barcode${scannedProductsLength}`);
+
+    document.querySelector(".barcodes")?.appendChild(newBarcodeElement);
+
+    JsBarcode(`#barcode${scannedProductsLength}`, String(code));
+  }
 
   useEffect(() => {
     const codeReader = new BrowserMultiFormatReader();
@@ -31,6 +45,7 @@ export default function BarcodeScanner() {
 
               if (data.status === 1) {
                 setProductName(data.product.product_name || "Produto sem nome");
+                addProduct(data.product.product_name, barcode);
               } else {
                 setProductName("Produto não encontrado");
               }
@@ -43,7 +58,9 @@ export default function BarcodeScanner() {
         }
 
         if (!stopStream) {
-          stopStream = () => controls.stop();
+          setTimeout(() => {
+            stopStream = () => controls.stop();
+          }, 2000);
         }
       }
     );
@@ -57,7 +74,7 @@ export default function BarcodeScanner() {
     <main className="w-screen h-screen flex flex-col items-center gap-y-10">
       <video ref={videoRef} />
 
-      <div className="absolute flex flex-col items-center">
+      <div className="flex flex-col items-center">
         <p>
           <strong>Código detectado:</strong> {code || "Nenhum"}
         </p>
@@ -69,9 +86,12 @@ export default function BarcodeScanner() {
           </p>
         ) : null}
         <button>
-          <span>0</span>
+          <span className="product-amount">{scannedProductsLength}</span>
           <CiBarcode size={64}></CiBarcode>
         </button>
+
+        {/* BARCODES */}
+        <div className="barcodes"></div>
       </div>
     </main>
   );

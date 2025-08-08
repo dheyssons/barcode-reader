@@ -26,5 +26,5 @@ body {
 }
 
 button {
-  @apply max-w-max;
+  @apply max-w-max cursor-pointer;
 }
