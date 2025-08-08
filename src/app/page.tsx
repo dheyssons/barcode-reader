@@ -18,8 +18,14 @@ export default function BarcodeScanner() {
 
     const newBarcodeElement = document.createElement("canvas");
     newBarcodeElement.setAttribute("id", `barcode${barcodeElementLength}`);
+    newBarcodeElement.style.width = "100%";
 
-    document.querySelector(".barcodes")?.appendChild(newBarcodeElement);
+    const barcodeWrapper = document.createElement("div");
+    barcodeWrapper.style.height = "100vh";
+
+    barcodeWrapper.appendChild(newBarcodeElement);
+    document.querySelector(".barcodes")?.appendChild(barcodeWrapper);
+
     JsBarcode(`#barcode${barcodeElementLength}`, productBarcode);
 
     setScannedProductsLength(barcodeElementLength + 1);
@@ -91,10 +97,10 @@ export default function BarcodeScanner() {
           <span className="product-amount">{scannedProductsLength}</span>
           <CiBarcode size={64}></CiBarcode>
         </button>
-
-        {/* BARCODES */}
-        <div className="barcodes"></div>
       </div>
+
+      {/* BARCODES */}
+      <div className="barcodes flex flex-col w-[80%] mt-20"></div>
     </main>
   );
 }
