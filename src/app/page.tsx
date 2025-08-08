@@ -13,14 +13,16 @@ export default function BarcodeScanner() {
   const [products, setProducts] = useState(null);
 
   function addProduct(productName: any, productBarcode: any) {
-    setScannedProductsLength(scannedProductsLength + 1);
+    const allCanvas = document.querySelectorAll("canvas");
+    const barcodeElementLength = allCanvas.length;
 
     const newBarcodeElement = document.createElement("canvas");
-    newBarcodeElement.setAttribute("id", `barcode${scannedProductsLength}`);
+    newBarcodeElement.setAttribute("id", `barcode${barcodeElementLength}`);
 
     document.querySelector(".barcodes")?.appendChild(newBarcodeElement);
+    JsBarcode(`#barcode${barcodeElementLength}`, productBarcode);
 
-    JsBarcode(`#barcode${scannedProductsLength}`, String(code));
+    setScannedProductsLength(barcodeElementLength + 1);
   }
 
   useEffect(() => {
