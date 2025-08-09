@@ -12,7 +12,7 @@ export default function BarcodeScanner() {
   const [scannedProductsLength, setScannedProductsLength] = useState(0);
   const [products, setProducts] = useState(null);
 
-  function addProduct(productName: any, productBarcode: any) {
+  function addProduct(productBarcode: any) {
     const allCanvas = document.querySelectorAll("canvas");
     const barcodeElementLength = allCanvas.length;
 
@@ -43,25 +43,9 @@ export default function BarcodeScanner() {
           const barcode = result.getText();
           if (barcode !== code) {
             setCode(barcode);
-            setProductName(null);
             setLoading(true);
-            try {
-              const res = await fetch(
-                `https://world.openfoodfacts.org/api/v2/product/${barcode}.json`
-              );
-              const data = await res.json();
 
-              if (data.status === 1) {
-                setProductName(data.product.product_name || "Produto sem nome");
-                addProduct(data.product.product_name, barcode);
-              } else {
-                setProductName("Produto não encontrado");
-              }
-            } catch (error) {
-              setProductName("Erro na busca");
-            } finally {
-              setLoading(false);
-            }
+            addProduct(barcode);
           }
         }
 
@@ -86,16 +70,12 @@ export default function BarcodeScanner() {
         <p>
           <strong>Código detectado:</strong> {code || "Nenhum"}
         </p>
-        {loading ? (
-          <p>🔎 Buscando produto...</p>
-        ) : productName ? (
-          <p>
-            <strong>Nome do produto:</strong> {productName}
-          </p>
-        ) : null}
-        <button>
-          <span className="product-amount">{scannedProductsLength}</span>
+
+        <button className="flex items-center">
           <CiBarcode size={64}></CiBarcode>
+          <span className="product-amount text-lg bg-white text-black p-2 rounded-full max-h-max">
+            {scannedProductsLength}
+          </span>
         </button>
       </div>
 
